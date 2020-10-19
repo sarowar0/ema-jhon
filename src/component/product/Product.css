@@ -13,11 +13,12 @@
     font-size: 16px;
     font-weight: 400;
 }
-.addCartBtn{
+.addCartBtn, .showDetails{
     background-color: #f0c14b;
     border: 1px solid rgb(170, 170, 170);
     border-radius: 2px;
     font-size: 15px;
     padding: 2px 20px;
     margin-top: 5px;
+    margin-right: 50px;
 }

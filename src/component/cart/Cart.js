@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Cart.css'
 
 const Cart = (props) => {
+    console.log(props);
     const cart = props.cart;
     let total =0;
     for (let i = 0; i < cart.length; i++) {
@@ -27,11 +29,11 @@ const Cart = (props) => {
         <div className='cart'>
             <h5>Total Summary</h5>
             <h6 className='mb-3'>Total Ordered: {cart.length}</h6>
-            <p>Order price: {parseFloat(total.toFixed(2))}</p>
-            <p>Shipping const: {shipping}</p>
-            <p>Tax: {tax}</p>
-            <p>Grand Total: {grandTotal}</p>
-            <button>Review your order</button>
+            <p>Order price: <span>$ {parseFloat(total.toFixed(2))}</span></p>
+            <p>Shipping const: <span> $ {shipping}</span></p>
+            <p>Tax: <span>$ {tax}</span></p>
+            <p>Grand Total:$ <span>{grandTotal}</span></p>
+            <Link to="/review"><button>Review your order</button></Link>
         </div>
     );
 };

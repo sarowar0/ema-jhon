@@ -1,0 +1,25 @@
+.reviewItem{
+    width: 60%;
+    padding:10px;
+    margin: 10px 0px;
+    margin-left: 100px;
+    border-bottom: 1px solid lightseagreen;
+}
+.reviewItem h6{
+    color:blue;
+    font-size: 18px;
+    font-weight: 400;
+
+}
+.reviewContent{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.reviewContent button{
+    background-color: rgb(196, 167, 6);
+    padding: 3px 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+}

@@ -1,0 +1,14 @@
+.productView{
+    width: 75%;
+    margin: auto;
+    display: flex;
+    padding: 15px;
+}
+.productView img{
+    width:300px;
+}
+.feature li{
+    font-size:14px;
+    line-height: 18px;
+    margin-left: 20px;
+}
