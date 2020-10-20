@@ -1,25 +1,11 @@
-.reviewItem{
-    width: 60%;
+.review{
     padding:10px;
-    margin: 10px 0px;
-    margin-left: 100px;
-    border-bottom: 1px solid lightseagreen;
+    margin:10px;
+    border-bottom: 1px solid lightblue;
 }
-.reviewItem h6{
-    color:blue;
-    font-size: 18px;
-    font-weight: 400;
-
-}
-.reviewContent{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-.reviewContent button{
-    background-color: rgb(196, 167, 6);
-    padding: 3px 40px;
+.cart-desc button{
+    background-color:rgb(212, 183, 14);
     border: 1px solid black;
     border-radius: 5px;
-
+    padding: 2px 30px;
 }

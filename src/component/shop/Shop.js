@@ -11,12 +11,12 @@ const Shop = () => {
     const handlerCarBtn = (product) => {
         const newCart = [...cart, product];
         setCart(newCart);
-        const sameProduct = newCart.filter(pd => pd.key === product.key);
+        const sameProduct = newCart.filter( pd => pd.key === product.key);
         const counts = sameProduct.length;
         addToDatabaseCart(product.key, counts)
     };
     return (
-        <div className='shop-container'>
+        <div className='shopAndReviewContainer'>
             <div className='product-container'>
                 {
                     products.map( pd => <Product 
