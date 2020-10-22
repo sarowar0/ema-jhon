@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import fakeData from '../../fakeData';
-import { getDatabaseCart, removeFromDatabaseCart } from '../../utilities/databaseManager';
+import { getDatabaseCart, processOrder, removeFromDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../cart/Cart';
 import ReviewItems from '../ReviewItems/ReviewItems'
 
 const Review = () => {
     const [cart, setCart] = useState([]);
+
+    const handlePlaceOrder = () => {
+        setCart([])
+        processOrder()
+    }
 
     const removeProduct = (productKey) => {
         const newCart = cart.filter( pd => pd.key !== productKey);
@@ -37,10 +43,11 @@ const Review = () => {
             </div>
             <div className="cart-container">
                 <Cart 
-               
                 cart={cart} 
                 showPlaceOrder ={true}
-                ></Cart>
+                >
+                    <Link to="/place-order"><button onClick={handlePlaceOrder} >Place order</button></Link>
+                </Cart>
             </div>
         </div>
     );

@@ -1,15 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Cart.css'
 
 const Cart = (props) => {
-
     const cart = props.cart;
     let total =0;
     for (let i = 0; i < cart.length; i++) {
         const product = cart[i];
         total = parseFloat((total + product.price * product.quantity).toFixed(2))
-
+        
     }
     
     let shipping = 0;
@@ -33,7 +31,9 @@ const Cart = (props) => {
             <p>Shipping const: <span> $ {shipping}</span></p>
             <p>Tax: <span>$ {tax}</span></p>
             <p>Grand Total:$ <span>{grandTotal}</span></p>
-            <Link to="/review"><button>Review your order</button></Link>
+            {
+                props.children
+            }
         </div>
     );
 };

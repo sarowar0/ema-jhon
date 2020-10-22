@@ -12,6 +12,8 @@ import {
   Link
 } from "react-router-dom";
 import ProductDetails from './component/ProductDetails/ProductDetails';
+import PlaceOrder from './component/PlaceOrder/PlaceOrder';
+import Topic from './component/Topic/Topic';
 
 function App() {
   return (
@@ -33,6 +35,9 @@ function App() {
           </Route>
           <Route path="/product/:productKey">
             <ProductDetails></ProductDetails>
+          </Route>
+          <Route path="/place-order">
+            <PlaceOrder></PlaceOrder>
           </Route>
           <Route path="*">
             <NotFound></NotFound>
