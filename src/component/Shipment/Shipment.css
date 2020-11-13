@@ -1,0 +1,10 @@
+.shipment{
+    width: 30%;
+    margin: auto;
+}
+.shipment input{
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    margin: 10px;
+}

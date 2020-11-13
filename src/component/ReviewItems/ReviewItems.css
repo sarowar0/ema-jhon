@@ -1,11 +1,9 @@
-.review{
+.product-review{
     padding:10px;
     margin:10px;
     border-bottom: 1px solid lightblue;
 }
-.cart-desc button{
-    background-color:rgb(212, 183, 14);
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 2px 30px;
+.review-content{
+    display: flex;
+    justify-content:space-between;
 }
