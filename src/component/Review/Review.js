@@ -6,6 +6,9 @@ import Cart from '../cart/Cart';
 import ReviewItems from '../ReviewItems/ReviewItems';
 import happyShop from '../../images/giphy.gif';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../Login/useAuth';
+
+
 const Review = () => {
     const [cart, setCart] = useState([]);
     const [placeOrder, setPlaceOrder] = useState(false);
@@ -30,6 +33,8 @@ const Review = () => {
         setCart(cartProduct)
     }, [])
 
+    const auth = useAuth();
+    
   const message = placeOrder && <img src={happyShop} alt=""/>
     return (
         <div className='shopAndReviewContainer'>
@@ -45,10 +50,19 @@ const Review = () => {
                  {
                      message
                  }
+                 {
+                     !cart.length && <div>
+                         <h3>No items in cart</h3>
+                         <a href="/">Keep Shopping</a>
+                     </div>
+                 }
             </div>
                 <div className="cart-container">
                     <Cart cart={cart}>
-                        <button onClick={handleProceedCheckout} className="cart-button">Procced checkout</button>
+                        {   auth.user ?
+                            <button onClick={handleProceedCheckout} className="cart-button">Procced shipment</button>
+                            :<button onClick={handleProceedCheckout} className="cart-button">Procced checkout</button>
+                        }
                     </Cart>
                 </div>
         </div>

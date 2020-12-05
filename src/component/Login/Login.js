@@ -1,211 +1,58 @@
-import React, { useState } from 'react';
-import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from './firebase.Config';
-import './Login.css'
-import { useContext } from 'react';
-import { UserContext } from '../../App';
-import { useHistory, useLocation } from 'react-router-dom';
-
-firebase.initializeApp(firebaseConfig);
+import React from 'react';
+import './Login.css';
+import { useAuth } from './useAuth';
 
 const Login = () => {
-
-  //Context api
-  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
-  const history = useHistory();
-  const location = useLocation();
-  let { from } = location.state || { from: { pathname: "/" } };
-
-  //Local state
-  const [newUser, setNewUser] = useState(false)
-  const [user, setUser] = useState({
-    isSignIn: false,
-    name: '',
-    email: '',
-    photo: '',
-    password: '',
-    error: '',
-    success: false
-  });
-
-  
-
-  //This is sign in with google event handler
-
-  const signInHandler = () => {
-  const googleProvider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(googleProvider)
-      .then(res => {
-        const { displayName, email, photoURL } = res.user;
-        setUser({
-          isSignIn: true,
-          name: displayName,
-          email: email,
-          photo: photoURL
-        })
-        setLoggedInUser(res.user)
-      })
-  }
-
-
-  //Sing in with facebook
-  const fbSignInHandler = () => {
-  var fbProvider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithPopup(fbProvider)
-      .then(result => {
-        const { displayName, email, photoURL } = result.user;
-        setUser({
-          isSignIn: true,
-          name: displayName,
-          email: email,
-          photo: photoURL
-        })
-        console.log(result.user);
-      })
-      .catch(error => {
-        var errorMessage = error.message;
-        console.log(errorMessage);
-      });
-  }
-
-
-  //Sign in with github
-  const githubSignInHandler = () => {
-  var githubProvider = new firebase.auth.GithubAuthProvider();
-    firebase.auth().signInWithPopup(githubProvider)
-      .then(function (result) {
-        var user = result.user;
-        console.log(user);
-
-      }).catch(function (error) {
-        var errorMessage = error.message;
-        console.log(errorMessage);
-      });
-  }
-
-  //This is sign out with google event handler
-  const signOutHandler = () => {
-    firebase.auth().signOut()
-      .then(res => {
-        setUser({
-          isSignIn: false,
-          name: "",
-          email: "",
-          photo: "",
-        })
-      })
-  }
-
-  //This is sign in form validittion
-  const formInputHandler = (e) => {
-    let isFieldValid = true;
-    if (e.target.name == 'name') {
-      isFieldValid = e.target.value;
+  const auth = useAuth();
+  const user = auth.user;
+  //Form validation
+  const inputFieldValidation = (e) => {
+    let isFormValid = true;
+    if(e.target.name == 'name'){
+      isFormValid = e.target.value;
+      console.log(isFormValid);
     }
-    if (e.target.name == 'email') {
-      isFieldValid = /\S+@\S+\.\S+/.test(e.target.value)
+    if(e.target.name == 'email'){
+      isFormValid = /\S+@\S+\.\S+/.test(e.target.value)
+      console.log(isFormValid);
     }
-    if (e.target.name == 'password') {
-      isFieldValid = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(e.target.value)
+    if(e.target.name == 'password'){
+      isFormValid = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/.test(e.target.value)
+      console.log(isFormValid);
     }
-    if (isFieldValid) {
-      const newUserInfo = { ...user };
+    if(isFormValid){
+      const newUserInfo = {...user};
       newUserInfo[e.target.name] = e.target.value;
-      setUser(newUserInfo)
+      console.log(isFormValid);
     }
   }
 
-
-
-  //This is common function of form submit
-  const success = () => {
-    const newUserInfo = { ...user };
-    newUserInfo.error = "";
-    newUserInfo.success = true;
-    setUser(newUserInfo);
-    setLoggedInUser(newUserInfo)
-    history.replace(from);
+  // //Redirect auth
+  const handleSignIn = () => {
+    auth.signInWithGoogle()
+    .then(res => {
+      window.location.pathname = '/review'
+    })
   }
-
-  const err = (error) => {
-    const newUserInfo = { ...user };
-    newUserInfo.error = error.message;
-    newUserInfo.success = false;
-    setUser(newUserInfo)
-  }
-
-  //This is submit event handler
-  const submitHandler = (e) => {
-    if (newUser && user.email && user.password) {
-      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-        .then(res => {
-          success()
-        })
-        .catch(function (error) {
-          err(error)
-        });
-    }
-
-    if (!newUser && user.email && user.password) {
-      firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-        .then(res => {
-          success()
-        })
-        .catch(function (error) {
-          err(error)
-        });
-    }
-    e.preventDefault()
-  }
-
-
+  
   return (
-    <div style={{ textAlign: 'center' }} className='login'>
-      {
-        user.isSignIn ? <button onClick={signOutHandler} className='btn btn-success m-4'>Sign Out</button> :
-          <button onClick={signInHandler} className='btn btn-success m-4'>Google Sign In</button>
-      }
-      <button onClick={fbSignInHandler} className='btn btn-success'>Facebook sign in</button>
-      <button onClick={githubSignInHandler} className='btn btn-success ml-4'>Github sing in</button>
-      {
-        user.isSignIn && <div>
-          <h2>Welcome {user.name}</h2>
-          <h6>Your email- {user.email}</h6>
-          <img src={user.photo} alt="" />
-        </div>
-      }
-
-      <form onSubmit={submitHandler} className='form'>
-        <h4 className='text-left text-success text-uppercase'>{newUser ? 'Sign up' : 'Sign in'}</h4>
-        {newUser && <div className='d-flex justify-content-between w-100'> <input type="text" onBlur={formInputHandler} name="Lname" placeholder="First Name" required />
-          <input type="text" name='fName' placeholder='Last name' required />
-        </div>
-        }
-        <br />
-        <input type="text" onBlur={formInputHandler} name="email" placeholder="Your email address" required className='w-100' />
-        <br /><br />
-        {
-          newUser && <> <input type="text" onBlur={formInputHandler} name="email" placeholder="Your email address" required className='w-100' />
-            <br /> <br />
-          </>
-        }
-        <input type="password" onBlur={formInputHandler} name="password" placeholder="Your password" required className='w-100' />
-        <br /><br />
-        <input type="submit" value={newUser ? "Sing Up" : "Sign In"} className="btn btn-success w-100" />
-
-        {/* <a onClick={setNewUser(!newUser)} href="#" className='float-right mt-2'>Don't have an account? Sign Up</a> */}
-        <input type="checkbox" onChange={() => { setNewUser(!newUser) }} name="newUser" id="" className='mr-2' />
-        <label htmlFor="newUser">Create new user</label><br />
-      </form>
-      <p style={{ color: 'red' }}>{user.error}</p>
-      {
-        user.success && <p style={{ color: 'green' }}>Your {newUser ? 'created' : 'Logged In'} successfully</p>
-      }
-
-
+    <div className='login-container'>
+      <div className="sign-up-form border px-4">
+        <form className='form-group mb-0'>
+          <input onBlur={inputFieldValidation} type="text" name='name' className="form-control" placeholder='Your name' />
+          <input onBlur={inputFieldValidation} type="text" name='email' className="form-control" placeholder='Your email address' />
+          <input onBlur={inputFieldValidation} type="password" name="password" id="password" className='form-control' placeholder="Password" />
+          <input onBlur={inputFieldValidation} type="password" name="password" id='confirmPass' className='form-control' placeholder="Confirm Password" />
+          <label id='passIsMatch'></label>
+          <input type="submit" value="Create an account" className='create-account' />
+        </form>
+        <p>Already have an account? <span className='btn btn-link'>Sign In</span></p>
+      </div>
+      <button onClick={handleSignIn} className="btn btn-warning d-block w-75 mx-auto my-2">Sign in with google</button>
+      <button onClick={auth.signInWithFb} className="btn btn-warning d-block w-75 mx-auto my-2">Sign in with facebook</button>
     </div>
   );
 };
 
 export default Login;
+

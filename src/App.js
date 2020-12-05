@@ -6,31 +6,27 @@ import Shop from './component/shop/Shop';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import Review from './component/Review/Review';
 import Manage from './component/Manage/Manage';
 import NotFound from './component/NotFound/NotFound';
 import ProductDetails from './component/ProductDetails/ProductDetails';
 import Login from './component/Login/Login';
-import Shipment from './component/Shipment/Shipment';
-import { createContext } from 'react';
 import { useState } from 'react';
-import PrivateRoute from './component/PrivateRoute/PrivateRoute'
 import Register from './component/Register/Register';
+import { AuthContextProvider, PrivateRoute } from './component/Login/useAuth';
+import Shipment from './component/Shipment/Shipment';
 
 
 
-export const UserContext = createContext();
 
 function App() {
  
   const [loggedInUser, setLoggedInUser] = useState({})
 
   return (
-    <UserContext.Provider value={[loggedInUser, setLoggedInUser]} className="App">
-      <h3>Emial: {loggedInUser.email}</h3>
+    <AuthContextProvider>
       <Router>
       <Header></Header>
         <Switch>
@@ -48,15 +44,15 @@ function App() {
             <Review></Review>
           </Route>
 
-          <PrivateRoute path="/manage">
+          <Route path="/manage">
             <Manage></Manage>
-          </PrivateRoute>
+          </Route>
 
           <Route path="/login">
             <Login></Login>
           </Route>
 
-          <PrivateRoute path="/shipment">
+          <PrivateRoute path='/shipment'>
             <Shipment></Shipment>
           </PrivateRoute>
 
@@ -73,7 +69,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </UserContext.Provider>
+    </AuthContextProvider>
   );
 }
 

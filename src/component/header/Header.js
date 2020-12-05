@@ -1,20 +1,35 @@
 import React from 'react';
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../App';
 import logo from '../../images/logo.png'
+import Auth, { useAuth } from '../Login/useAuth';
 import './Header.css'
+
 const Header = () => {
-    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+    const auth = useAuth();
+    
+    const handleSignOut = () => {
+        auth.signOut()
+        .then(res => {
+            window.location.pathname = "/"
+        })
+    }
     return (
         <div className='header'>
             <img src={logo} alt="" />
             <nav>
                 <div className="container">
-                    <Link to="/shop">Shop</Link>
-                    <Link to="/review">Order review</Link>
-                    <Link to="/manage">Order manage</Link>
-                    <button onClick={() => {setLoggedInUser({})}} className='btn btn-small btn-secondary'>Sign out</button>
+                    <div className="d-flex justify-content-center">
+                        <Link to="/shop">Shop</Link>
+                        <Link to="/review">Order review</Link>
+                        <Link to="/manage">Order manage</Link>
+
+                        {auth.user && <Link className='text-warning text-uppercase'>{auth.user.name}</Link>}
+                        {
+                            auth.user ?
+                            <Link onClick={handleSignOut} >Sign Out</Link>
+                            : <Link to='/login' >Sign In</Link>
+                        }
+                    </div>
                 </div>
             </nav>
         </div>

@@ -1,10 +1,13 @@
-.shipment{
-    width: 30%;
+.shipment-form{
+    width: 25%;
     margin: auto;
 }
-.shipment input{
+.shipment-form input{
     display: block;
-    width: 100%;
-    padding: 5px 10px;
-    margin: 10px;
+    margin: 20px 0px 10px 0px;
+    padding: 7px;
+    color: black;
+}
+.shipment-form span{
+    color: red;
 }
